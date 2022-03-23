@@ -1,16 +1,19 @@
 $(document).ready(function() {
+    // Configure CKEditor to include the zotero plugin.
     $(document).on('o:ckeditor-config', function(event, config) {
         config.toolbar[0].items.push('-');
         config.toolbar[0].items.push('Zotero');
         config.extraPlugins.push('zotero');
     });
     if ('object' === typeof CKEDITOR) {
-        CKEDITOR.plugins.addExternal('zotero', ZoteroCkeditorPluginPath);
+        // Make CKEditor aware of the zotero plugin.
+        CKEDITOR.plugins.addExternal('zotero', ZoteroCitationsCkeditorPluginPath);
+        // Set defualt settings for the zotero plugin.
         CKEDITOR.zoteroDefaultSettings = {
-            apiKey: '',
-            apiLibraryType: 'users',
-            apiLibraryId: 15,
-            citationStyle: 'chicago-author-date',
+            citationStyle: ZoteroCitationsCitationStyle,
+            apiLibraryType: ZoteroCitationsApiLibraryType,
+            apiLibraryId: ZoteroCitationsApiLibraryId,
+            apiKey: ZoteroCitationsApiKey,
         };
     }
 });
