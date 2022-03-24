@@ -1,4 +1,7 @@
 CKEDITOR.dialog.add('zoteroDialog', function(editor) {
+    CKEDITOR.dialog.on('show', function() {
+        console.log('dialog show');
+    });
     const fetchApiResponse = async function(dialog, url, params) {
         const urlObj = new URL(url);
         urlObj.search = new URLSearchParams(params).toString();
@@ -14,6 +17,7 @@ CKEDITOR.dialog.add('zoteroDialog', function(editor) {
         const params = {
             q: dialog.getValueOf('tab-citation', 'search-query'),
             qmode: 'titleCreatorYear',
+            limit: 100,
         };
         const url = `https://api.zotero.org/${libraryType}/${libraryId}/items/top`;
         const response = await fetchApiResponse(dialog, url, params);
@@ -64,10 +68,10 @@ CKEDITOR.dialog.add('zoteroDialog', function(editor) {
                         id: 'search-button',
                         label: 'Search library',
                         onClick: function() {
-                            const button = this;
-                            const dialog = button.getDialog();
-                            const containerDiv = $(button.getElement().$).closest('div[name="tab-citation"]');
-                            containerDiv.find('.zotero-search-results').empty();
+                            const dialog = this.getDialog();
+                            const searchResultsContainer = $(dialog.getContentElement('tab-citation', 'search-results').getElement().$);
+                            searchResultsContainer.find('.zotero-search-results').empty();
+                            searchResultsContainer.find('.zotero-search-results-loading').show();
                             getItems(dialog).then(items => {
                                 items.forEach(item => {
                                     const title = item.data.title ? item.data.title.substr(0, 100) : '[no title]';
@@ -83,14 +87,26 @@ CKEDITOR.dialog.add('zoteroDialog', function(editor) {
                                     itemInput.appendTo(itemLabel);
                                     itemLabel.appendTo(itemDiv);
                                     itemLabel.append(` ${title} (${creator})`);
-                                    containerDiv.find('.zotero-search-results').append(itemDiv);
+                                    searchResultsContainer.find('.zotero-search-results-loading').hide();
+                                    searchResultsContainer.find('.zotero-search-results').append(itemDiv);
                                 });
                             });
                         },
                     },
                     {
                         type: 'html',
-                        html: '<div class="zotero-search-results"></div>',
+                        id: 'search-results',
+                        html: `
+                        <div class="zotero-search-results-wrapper">
+                            <div class="zotero-search-results-loading" style="display: none;">Loading...</div>
+                            <div class="zotero-search-results"></div>
+                        </div>`,
+                        onHide: function() {
+                            // Reset the search results container.
+                            const searchResultsContainer = $(this.getDialog().getContentElement('tab-citation', 'search-results').getElement().$);
+                            searchResultsContainer.find('.zotero-search-results').empty();
+                            searchResultsContainer.find('.zotero-search-results-loading').hide();
+                        },
                     }
                 ]
             },
