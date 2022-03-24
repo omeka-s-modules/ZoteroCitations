@@ -1,7 +1,4 @@
 CKEDITOR.dialog.add('zoteroDialog', function(editor) {
-    CKEDITOR.dialog.on('show', function() {
-        console.log('dialog show');
-    });
     const fetchApiResponse = async function(dialog, url, params) {
         const urlObj = new URL(url);
         urlObj.search = new URLSearchParams(params).toString();
@@ -17,6 +14,7 @@ CKEDITOR.dialog.add('zoteroDialog', function(editor) {
         const params = {
             q: dialog.getValueOf('tab-citation', 'search-query'),
             qmode: 'titleCreatorYear',
+            sort: 'title',
             limit: 100,
         };
         const url = `https://api.zotero.org/${libraryType}/${libraryId}/items/top`;
@@ -72,24 +70,40 @@ CKEDITOR.dialog.add('zoteroDialog', function(editor) {
                             const searchResultsContainer = $(dialog.getContentElement('tab-citation', 'search-results').getElement().$);
                             searchResultsContainer.find('.zotero-search-results').empty();
                             searchResultsContainer.find('.zotero-search-results-loading').show();
+                            const serchResultsTable = $(`
+                            <table style="width: 100%; border-collapse: collapse;">
+                                <thead>
+                                    <tr>
+                                        <th style="padding: 3px 10px 3px 3px; font-weight: bold;"></th>
+                                        <th style="padding: 3px; font-weight: bold;">Title</th>
+                                        <th style="padding: 3px; font-weight: bold;">Creator</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>`);
                             getItems(dialog).then(items => {
                                 items.forEach(item => {
-                                    const title = item.data.title ? item.data.title.substr(0, 100) : '[no title]';
-                                    const creator = item.meta.creatorSummary ? item.meta.creatorSummary : '[no author]';
-                                    const itemDiv = $('<div>');
-                                    const itemLabel = $('<label>');
-                                    const itemInput = $('<input>', {
+                                    const radio = $('<input>', {
                                         type: 'radio',
                                         class: 'ckeditor-zotero-item',
                                         name: 'ckeditor-zotero-item',
                                         value: item.key,
                                     });
-                                    itemInput.appendTo(itemLabel);
-                                    itemLabel.appendTo(itemDiv);
-                                    itemLabel.append(` ${title} (${creator})`);
-                                    searchResultsContainer.find('.zotero-search-results-loading').hide();
-                                    searchResultsContainer.find('.zotero-search-results').append(itemDiv);
+                                    const title = item.data.title ? item.data.title.substr(0, 100) : '[no title]';
+                                    const creator = item.meta.creatorSummary ? item.meta.creatorSummary : '[no creator]';
+                                    const searchResultsRow = $(`
+                                    <tr style="border-bottom: 1px solid #D1D1D1;">
+                                        <td class="zotero-search-results-radio" style="padding: 3px 10px 3px 3px;"></td>
+                                        <td class="zotero-search-results-title" style="padding: 3px;"></td>
+                                        <td class="zotero-search-results-creator" style="padding: 3px;"></td>
+                                    </tr>`);
+                                    searchResultsRow.find('.zotero-search-results-title').append(title);
+                                    searchResultsRow.find('.zotero-search-results-creator').append(creator);
+                                    searchResultsRow.find('.zotero-search-results-radio').append(radio);
+                                    serchResultsTable.find('tbody').append(searchResultsRow);
                                 });
+                                searchResultsContainer.find('.zotero-search-results-loading').hide();
+                                searchResultsContainer.find('.zotero-search-results').append(serchResultsTable);
                             });
                         },
                     },
