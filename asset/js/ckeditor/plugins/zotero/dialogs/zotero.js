@@ -113,20 +113,8 @@ CKEDITOR.dialog.add('zoteroDialog', function(editor) {
                         type: 'select',
                         id: 'citation-style',
                         label: 'Citation style',
-                        items: [
-                            ['AMA', 'american-medical-association'],
-                            ['APA', 'apa'],
-                            ['Chicago (author-date)', 'chicago-author-date'],
-                            ['Chicago (note, bibliography)', 'chicago-note-bibliography'],
-                            ['Elsevier Harvard', 'elsevier-harvard'],
-                            ['Harvard Cite Them Right', 'harvard-cite-them-right'],
-                            ['IEEE', 'ieee'],
-                            ['MHRA', 'modern-humanities-research-association'],
-                            ['MLA', 'modern-language-association'],
-                            ['Nature', 'nature'],
-                            ['Vancouver', 'vancouver']
-                        ],
-                        default: CKEDITOR.zoteroDefaultSettings.citationStyle,
+                        items: JSON.parse(editor.config.zoteroCitationStyles),
+                        default: editor.config.zoteroCitationStyle,
                     },
                     {
                         type: 'select',
@@ -136,19 +124,19 @@ CKEDITOR.dialog.add('zoteroDialog', function(editor) {
                             ['User', 'users'],
                             ['Group', 'groups']
                         ],
-                        default: CKEDITOR.zoteroDefaultSettings.apiLibraryType,
+                        default: editor.config.zoteroApiLibraryType,
                     },
                     {
                         type: 'text',
                         id: 'api-library-id',
                         label: 'Library ID',
-                        default: CKEDITOR.zoteroDefaultSettings.apiLibraryId,
+                        default: editor.config.zoteroApiLibraryId,
                     },
                     {
                         type: 'text',
                         id: 'api-key',
                         label: 'API key',
-                        default: CKEDITOR.zoteroDefaultSettings.apiKey,
+                        default: editor.config.zoteroApiKey,
                     },
                 ]
             }

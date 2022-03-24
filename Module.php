@@ -9,6 +9,20 @@ use Laminas\ServiceManager\ServiceLocatorInterface;
 
 class Module extends AbstractModule
 {
+    const CITATION_STYLES = [
+        'american-medical-association' => 'AMA',
+        'apa' => 'APA',
+        'chicago-author-date' => 'Chicago (author-date)',
+        'chicago-note-bibliography' => 'Chicago (note, bibliography)',
+        'elsevier-harvard' => 'Elsevier Harvard',
+        'harvard-cite-them-right' => 'Harvard Cite Them Right',
+        'ieee' => 'IEEE',
+        'modern-humanities-research-association' => 'MHRA',
+        'modern-language-association' => 'MLA',
+        'nature' => 'Nature',
+        'vancouver' => 'Vancouver',
+    ];
+
     public function getConfig()
     {
         return include sprintf('%s/config/module.config.php', __DIR__);
@@ -29,16 +43,25 @@ class Module extends AbstractModule
             'view.layout',
             function (Event $event) {
                 $view = $event->getTarget();
+                // Build the path to the Zotero CKEditor plugin.
                 $pluginPath = $view->assetUrl('js/ckeditor/plugins/zotero/', 'ZoteroCitations');
                 $pluginPath = explode('?', $pluginPath)[0];
+                // Convert citation styles to a CKEditor-compatible format.
+                $citationStyles = [];
+                foreach (self::CITATION_STYLES as $key => $value) {
+                    $citationStyles[] = [$value, $key];
+                }
+                // Set global variables for use by Zotero CKEditor plugin.
                 $script = sprintf(<<<'EOD'
                     const ZoteroCitationsCkeditorPluginPath = "%s";
+                    const ZoteroCitationsCitationStyles = "%s";
                     const ZoteroCitationsCitationStyle = "%s";
                     const ZoteroCitationsApiLibraryType = "%s";
                     const ZoteroCitationsApiLibraryId = "%s";
                     const ZoteroCitationsApiKey = "%s";
                     EOD,
                     $view->escapeJs($pluginPath),
+                    $view->escapeJs(json_encode($citationStyles)),
                     $view->escapeJs($view->userSetting('zotero_citations_citation_style', 'chicago-author-date')),
                     $view->escapeJs($view->userSetting('zotero_citations_api_library_type', 'users')),
                     $view->escapeJs($view->userSetting('zotero_citations_api_library_id')),
@@ -58,19 +81,7 @@ class Module extends AbstractModule
                     'name' => 'zotero_citations_citation_style',
                     'options' => [
                         'label' => 'Zotero Citation: citation style', // @translate
-                        'value_options' => [
-                            'american-medical-association' => 'AMA',
-                            'apa' => 'APA',
-                            'chicago-author-date' => 'Chicago (author-date)',
-                            'chicago-note-bibliography' => 'Chicago (note, bibliography)',
-                            'elsevier-harvard' => 'Elsevier Harvard',
-                            'harvard-cite-them-right' => 'Harvard Cite Them Right',
-                            'ieee' => 'IEEE',
-                            'modern-humanities-research-association' => 'MHRA',
-                            'modern-language-association' => 'MLA',
-                            'nature' => 'Nature',
-                            'vancouver' => 'Vancouver',
-                        ],
+                        'value_options' => self::CITATION_STYLES,
                     ],
                     'attributes' => [
                         'class' => 'chosen-select',
