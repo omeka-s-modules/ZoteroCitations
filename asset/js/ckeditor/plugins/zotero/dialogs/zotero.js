@@ -1,4 +1,12 @@
 CKEDITOR.dialog.add('zoteroDialog', function(editor) {
+    /**
+     * Fetch a response from the Zotero API.
+     *
+     * @param {object} dialog
+     * @param {string} url
+     * @param {object} params
+     * @returns Promise
+     */
     const fetchApiResponse = async function(dialog, url, params) {
         const urlObj = new URL(url);
         if (params) {
@@ -10,6 +18,13 @@ CKEDITOR.dialog.add('zoteroDialog', function(editor) {
             }
         });
     };
+    /**
+     * Get items from the Zotero API.
+     *
+     * @param {object} dialog
+     * @param {string} url
+     * @returns Promise
+     */
     const getItems = async function(dialog, url) {
         let params;
         if (!url) {
@@ -23,6 +38,9 @@ CKEDITOR.dialog.add('zoteroDialog', function(editor) {
             };
         }
         const response = await fetchApiResponse(dialog, url, params);
+        if (!response.ok) {
+            throw new Error(`${response.status} ${response.statusText}`);
+        }
         // Handle previous and next buttons (dependent on the Link header).
         const previousButton = $(dialog.getContentElement('tab-citation', 'previous-button').getElement().$);
         const nextButton = $(dialog.getContentElement('tab-citation', 'next-button').getElement().$);
@@ -41,6 +59,13 @@ CKEDITOR.dialog.add('zoteroDialog', function(editor) {
         });
         return await response.json();
     }
+    /**
+     * Get an item by its key from the Zotero API.
+     *
+     * @param {object} dialog
+     * @param {string} itemKey
+     * @returns Promise
+     */
     const getItemByKey = async function(dialog, itemKey) {
         const libraryType = dialog.getValueOf('tab-settings', 'api-library-type');
         const libraryId = dialog.getValueOf('tab-settings', 'api-library-id');
@@ -52,6 +77,12 @@ CKEDITOR.dialog.add('zoteroDialog', function(editor) {
         const response = await fetchApiResponse(dialog, url, params);
         return await response.json();
     };
+    /**
+     * Get a bibliography from the Zotero API.
+     *
+     * @param {object} dialog
+     * @returns Promise
+     */
     const getBibliography = async function(dialog) {
         const citations = $(editor.getData()).find('span[class^="zotero-citation-"]');
         const itemKeys = $.map(citations, function(citation) {
@@ -68,6 +99,12 @@ CKEDITOR.dialog.add('zoteroDialog', function(editor) {
         const response = await fetchApiResponse(dialog, url, params);
         return await response.text();
     };
+    /**
+     * Fetch and prepare an item search.
+     *
+     * @param {object} dialog
+     * @param {string} url
+     */
     const prepareSearchResults = function(dialog, url) {
         const searchResultsContainer = $(dialog.getContentElement('tab-citation', 'search-results').getElement().$);
         searchResultsContainer.find('.zotero-search-results').empty();
@@ -110,6 +147,9 @@ CKEDITOR.dialog.add('zoteroDialog', function(editor) {
             });
             searchResultsContainer.find('.zotero-search-results-loading').hide();
             searchResultsContainer.find('.zotero-search-results').append(serchResultsTable);
+        }).catch(error => {
+            searchResultsContainer.find('.zotero-search-results-loading').hide();
+            searchResultsContainer.find('.zotero-search-results').text(error);
         });
     };
     return {
@@ -138,10 +178,8 @@ CKEDITOR.dialog.add('zoteroDialog', function(editor) {
                         type: 'html',
                         id: 'search-results',
                         html: `
-                        <div class="zotero-search-results-wrapper">
-                            <div class="zotero-search-results-loading" style="display: none;">Loading...</div>
-                            <div class="zotero-search-results"></div>
-                        </div>`,
+                        <div class="zotero-search-results-loading" style="display: none;">Loading...</div>
+                        <div class="zotero-search-results"></div>`,
                         onHide: function() {
                             // Reset the search results container.
                             const searchResultsContainer = $(this.getDialog().getContentElement('tab-citation', 'search-results').getElement().$);
