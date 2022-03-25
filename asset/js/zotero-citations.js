@@ -11,4 +11,5 @@ $(document).on('o:ckeditor-config', function(event, config) {
     config.zoteroApiLibraryType = ZoteroCitationsApiLibraryType;
     config.zoteroApiLibraryId = ZoteroCitationsApiLibraryId;
     config.zoteroApiKey = ZoteroCitationsApiKey;
+    config.zoteroSearchSort = ZoteroCitationsSearchSort;
 });

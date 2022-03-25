@@ -34,7 +34,7 @@ CKEDITOR.dialog.add('zoteroDialog', function(editor) {
             params = {
                 q: dialog.getValueOf('tab-citation', 'search-query'),
                 qmode: 'titleCreatorYear',
-                sort: 'title',
+                sort: dialog.getValueOf('tab-settings', 'search-sort'),
             };
         }
         const response = await fetchApiResponse(dialog, url, params);
@@ -131,6 +131,7 @@ CKEDITOR.dialog.add('zoteroDialog', function(editor) {
                     class: 'ckeditor-zotero-item',
                     name: 'ckeditor-zotero-item',
                     value: item.key,
+                    id: item.key,
                 });
                 const title = item.data.title ? item.data.title.substr(0, 100) : '[no title]';
                 const creator = item.meta.creatorSummary ? item.meta.creatorSummary : '[no creator]';
@@ -140,8 +141,8 @@ CKEDITOR.dialog.add('zoteroDialog', function(editor) {
                     <td class="zotero-search-results-title" style="padding: 3px;"></td>
                     <td class="zotero-search-results-creator" style="padding: 3px;"></td>
                 </tr>`);
-                searchResultsRow.find('.zotero-search-results-title').append(title);
-                searchResultsRow.find('.zotero-search-results-creator').append(creator);
+                searchResultsRow.find('.zotero-search-results-title').append($('<label>', {for: item.key}).append(title));
+                searchResultsRow.find('.zotero-search-results-creator').append($('<label>', {for: item.key}).append(creator));
                 searchResultsRow.find('.zotero-search-results-radio').append(radio);
                 serchResultsTable.find('tbody').append(searchResultsRow);
             });
@@ -256,6 +257,17 @@ CKEDITOR.dialog.add('zoteroDialog', function(editor) {
                         id: 'api-key',
                         label: 'API key',
                         default: editor.config.zoteroApiKey,
+                    },
+                    {
+                        type: 'select',
+                        id: 'search-sort',
+                        label: 'Search sort by',
+                        items: [
+                            ['Title', 'title'],
+                            ['Creator', 'creator'],
+                            ['Date modified', 'dateModified']
+                        ],
+                        default: editor.config.zoteroSearchSort,
                     },
                 ]
             }

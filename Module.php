@@ -59,13 +59,15 @@ class Module extends AbstractModule
                     const ZoteroCitationsApiLibraryType = "%s";
                     const ZoteroCitationsApiLibraryId = "%s";
                     const ZoteroCitationsApiKey = "%s";
+                    const ZoteroCitationsSearchSort = "%s";
                     EOD,
                     $view->escapeJs($pluginPath),
                     $view->escapeJs(json_encode($citationStyles)),
                     $view->escapeJs($view->userSetting('zotero_citations_citation_style', 'chicago-author-date')),
                     $view->escapeJs($view->userSetting('zotero_citations_api_library_type', 'users')),
                     $view->escapeJs($view->userSetting('zotero_citations_api_library_id')),
-                    $view->escapeJs($view->userSetting('zotero_citations_api_key'))
+                    $view->escapeJs($view->userSetting('zotero_citations_api_key')),
+                    $view->escapeJs($view->userSetting('zotero_citations_search_sort', 'title'))
                 );
                 $view->headScript()->appendScript($script);
                 $view->headScript()->appendFile($view->assetUrl('js/zotero-citations.js', 'ZoteroCitations'));
@@ -80,7 +82,7 @@ class Module extends AbstractModule
                     'type' => 'select',
                     'name' => 'zotero_citations_citation_style',
                     'options' => [
-                        'label' => 'Zotero Citation: citation style', // @translate
+                        'label' => 'Zotero Citation: Citation style', // @translate
                         'value_options' => self::CITATION_STYLES,
                     ],
                     'attributes' => [
@@ -122,6 +124,22 @@ class Module extends AbstractModule
                     ],
                     'attributes' => [
                         'value' => $form->getUserSettings()->get('zotero_citations_api_key'),
+                    ],
+                ]);
+                $form->get('user-settings')->add([
+                    'type' => 'select',
+                    'name' => 'zotero_citations_search_sort',
+                    'options' => [
+                        'label' => 'Zotero Citation: Search sort by', // @translate
+                        'value_options' => [
+                            'title' => 'Title', // @translate
+                            'creator' => 'Creator', // @translate
+                            'dateModified' => 'Date modified', // @translate
+                        ],
+                    ],
+                    'attributes' => [
+                        'class' => 'chosen-select',
+                        'value' => $form->getUserSettings()->get('zotero_citations_search_sort', 'title'),
                     ],
                 ]);
             }
