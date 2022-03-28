@@ -114,6 +114,7 @@ CKEDITOR.dialog.add('zoteroDialog', function(editor) {
         previousButton.hide();
         nextButton.hide();
         const serchResultsTable = $(`
+        <p>Select an item and press OK to add a citation.</p>
         <table style="width: 100%; border-collapse: collapse;">
             <thead>
                 <tr>
@@ -221,7 +222,7 @@ CKEDITOR.dialog.add('zoteroDialog', function(editor) {
                     {
                         type: 'checkbox',
                         id: 'add-bib',
-                        label: 'Check and press "OK" to add a bibliography',
+                        label: 'Check here and press OK to add a bibliography.',
                     },
                 ],
             },
