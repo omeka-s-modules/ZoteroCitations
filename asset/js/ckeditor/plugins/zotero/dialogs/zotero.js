@@ -95,6 +95,7 @@ CKEDITOR.dialog.add('zoteroDialog', function(editor) {
             format: 'bib',
             style: dialog.getValueOf('tab-settings', 'citation-style'),
             locale: dialog.getValueOf('tab-settings', 'bibliography-locale'),
+            linkwrap: dialog.getValueOf('tab-settings', 'bibliography-linkwrap') ? '1' : '0',
         };
         const url = `https://api.zotero.org/${libraryType}/${libraryId}/items`;
         const response = await fetchApiResponse(dialog, url, params);
@@ -244,6 +245,12 @@ CKEDITOR.dialog.add('zoteroDialog', function(editor) {
                         label: 'Bibliography locale',
                         items: JSON.parse(editor.config.zoteroBibliographyLocales),
                         default: editor.config.zoteroBibliographyLocale,
+                    },
+                    {
+                        type: 'checkbox',
+                        id: 'bibliography-linkwrap',
+                        label: 'Bibliography link wrap',
+                        default: parseInt(editor.config.zoteroBibliographyLinkwrap),
                     },
                     {
                         type: 'select',

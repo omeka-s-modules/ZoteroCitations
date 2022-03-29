@@ -10,6 +10,7 @@ $(document).on('o:ckeditor-config', function(event, config) {
     config.zoteroCitationStyle = ZoteroCitationsCitationStyle;
     config.zoteroBibliographyLocales = ZoteroCitationsBibliographyLocales;
     config.zoteroBibliographyLocale = ZoteroCitationsBibliographyLocale;
+    config.zoteroBibliographyLinkwrap = ZoteroCitationsBibliographyLinkwrap;
     config.zoteroApiLibraryType = ZoteroCitationsApiLibraryType;
     config.zoteroApiLibraryId = ZoteroCitationsApiLibraryId;
     config.zoteroApiKey = ZoteroCitationsApiKey;

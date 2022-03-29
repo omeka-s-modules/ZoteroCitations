@@ -134,6 +134,7 @@ class Module extends AbstractModule
                     const ZoteroCitationsCitationStyle = "%s";
                     const ZoteroCitationsBibliographyLocales = "%s";
                     const ZoteroCitationsBibliographyLocale = "%s";
+                    const ZoteroCitationsBibliographyLinkwrap = "%s";
                     const ZoteroCitationsApiLibraryType = "%s";
                     const ZoteroCitationsApiLibraryId = "%s";
                     const ZoteroCitationsApiKey = "%s";
@@ -144,6 +145,7 @@ class Module extends AbstractModule
                     $view->escapeJs($view->userSetting('zotero_citations_citation_style', 'chicago-author-date')),
                     $view->escapeJs(json_encode($bibliographyLocales)),
                     $view->escapeJs($view->userSetting('zotero_citations_bibliography_locale', 'en-US')),
+                    $view->escapeJs($view->userSetting('zotero_citations_bibliography_linkwrap', 0)),
                     $view->escapeJs($view->userSetting('zotero_citations_api_library_type', 'users')),
                     $view->escapeJs($view->userSetting('zotero_citations_api_library_id')),
                     $view->escapeJs($view->userSetting('zotero_citations_api_key')),
@@ -182,6 +184,19 @@ class Module extends AbstractModule
                         'class' => 'chosen-select',
                         'data-placeholder' => 'Select a bibliography locale', // @translate
                         'value' => $form->getUserSettings()->get('zotero_citations_bibliography_locale', 'en-US'),
+                    ],
+                ]);
+                $form->get('user-settings')->add([
+                    'type' => 'checkbox',
+                    'name' => 'zotero_citations_bibliography_linkwrap',
+                    'options' => [
+                        'label' => 'Zotero Citation: Bibliography link wrap', // @translate
+                        'use_hidden_element' => true,
+                        'checked_value' => 1,
+                        'unchecked_value' => 0,
+                    ],
+                    'attributes' => [
+                        'value' => $form->getUserSettings()->get('zotero_citations_bibliography_linkwrap', 0),
                     ],
                 ]);
                 $form->get('user-settings')->add([
