@@ -153,7 +153,7 @@ CKEDITOR.dialog.add('zoteroDialog', function(editor) {
             searchResultsContainer.find('.zotero-search-results').append(serchResultsTable);
         }).catch(error => {
             searchResultsContainer.find('.zotero-search-results-loading').hide();
-            searchResultsContainer.find('.zotero-search-results').text(error);
+            searchResultsContainer.find('.zotero-search-results').text(`${error}. Did you enter a valid library ID and/or API key?`);
         });
     };
     return {
