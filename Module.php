@@ -114,6 +114,10 @@ class Module extends AbstractModule
             'view.layout',
             function (Event $event) {
                 $view = $event->getTarget();
+                if (!$view->status()->isAdminRequest()) {
+                    // A user must be logged in to use this module.
+                    return;
+                }
                 // Build the path to the Zotero CKEditor plugin.
                 $pluginPath = $view->assetUrl('js/ckeditor/plugins/zotero/', 'ZoteroCitations');
                 $pluginPath = explode('?', $pluginPath)[0];
