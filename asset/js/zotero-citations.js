@@ -8,6 +8,8 @@ $(document).on('o:ckeditor-config', function(event, config) {
     // Configure the zotero plugin.
     config.zoteroCitationStyles = ZoteroCitationsCitationStyles;
     config.zoteroCitationStyle = ZoteroCitationsCitationStyle;
+    config.zoteroBibliographyLocales = ZoteroCitationsBibliographyLocales;
+    config.zoteroBibliographyLocale = ZoteroCitationsBibliographyLocale;
     config.zoteroApiLibraryType = ZoteroCitationsApiLibraryType;
     config.zoteroApiLibraryId = ZoteroCitationsApiLibraryId;
     config.zoteroApiKey = ZoteroCitationsApiKey;

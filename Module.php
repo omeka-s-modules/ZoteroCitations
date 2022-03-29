@@ -9,18 +9,89 @@ use Laminas\ServiceManager\ServiceLocatorInterface;
 
 class Module extends AbstractModule
 {
+    /**
+     * Citation styles.
+     *
+     * Zotero comes packaged with these styles. Add more here if needed.
+     */
     const CITATION_STYLES = [
-        'american-medical-association' => 'AMA',
-        'apa' => 'APA',
-        'chicago-author-date' => 'Chicago (author-date)',
-        'chicago-note-bibliography' => 'Chicago (note, bibliography)',
-        'elsevier-harvard' => 'Elsevier Harvard',
-        'harvard-cite-them-right' => 'Harvard Cite Them Right',
+        'american-chemical-society' => 'American Chemical Society (ACS)',
+        'american-medical-association' => 'American Medical Association (AMA)',
+        'american-political-science-association' => 'American Political Science Association (APSA)',
+        'apa' => 'American Psychological Association (APA)',
+        'american-sociological-association' => 'American Sociological Association (ASA)',
+        'chicago-author-date' => 'Chicago Manual of Style (author-date)',
+        'chicago-fullnote-bibliography' => 'Chicago Manual of Style (full note)',
+        'chicago-note-bibliography' => 'Chicago Manual of Style (note)',
+        'harvard-cite-them-right' => 'Cite Them Right - Harvard',
+        'elsevier-harvard' => 'Elsevier - Harvard (with titles)',
         'ieee' => 'IEEE',
-        'modern-humanities-research-association' => 'MHRA',
-        'modern-language-association' => 'MLA',
+        'modern-humanities-research-association' => 'Modern Humanities Research Association (note with bibliography) (MHRA)',
+        'modern-language-association' => 'Modern Language Association (MLA)',
         'nature' => 'Nature',
         'vancouver' => 'Vancouver',
+    ];
+
+    /**
+     * Bibliography locales.
+     *
+     * @see https://github.com/citation-style-language/locales
+     */
+    const BIBLIOGRAPHY_LOCALES = [
+        'af-ZA' => 'Afrikaans',
+        'ar' => 'العربية',
+        'bg-BG' =>'Български',
+        'ca-AD' => 'Català',
+        'cs-CZ' => 'Čeština',
+        'cy-GB' => 'Cymraeg',
+        'da-DK' => 'Dansk',
+        'de-AT' => 'Deutsch (Österreich)',
+        'de-CH' => 'Deutsch (Schweiz)',
+        'de-DE' => 'Deutsch (Deutschland)',
+        'el-GR' => 'Ελληνικά',
+        'en-GB' => 'English (UK)',
+        'en-US' => 'English (US)',
+        'es-CL' => 'Español (Chile)',
+        'es-ES' => 'Español (España)',
+        'es-MX' => 'Español (México)',
+        'et-EE' => 'Eesti keel',
+        'eu' => 'Euskara',
+        'fa-IR' => 'فارسی',
+        'fi-FI' => 'Suomi',
+        'fr-CA' => 'Français (Canada)',
+        'fr-FR' => 'Français (France)',
+        'he-IL' => 'עברית',
+        'hi-IN' => 'हिंदी',
+        'hr-HR' => 'Hrvatski',
+        'hu-HU' => 'Magyar',
+        'id-ID' => 'Bahasa Indonesia',
+        'is-IS' => 'Íslenska',
+        'it-IT' => 'Italiano',
+        'ja-JP' => '日本語',
+        'km-KH' => 'ភាសាខ្មែរ',
+        'ko-KR' => '한국어',
+        'la' => 'Latina',
+        'lt-LT' => 'Lietuvių kalba',
+        'lv-LV' => 'Latviešu',
+        'mn-MN' => 'Монгол',
+        'nb-NO' => 'Norsk bokmål',
+        'nl-NL' => 'Nederlands',
+        'nn-NO' => 'Norsk nynorsk',
+        'pl-PL' => 'Polski',
+        'pt-BR' => 'Português (Brasil)',
+        'pt-PT' => 'Português (Portugal)',
+        'ro-RO' => 'Română',
+        'ru-RU' => 'Русский',
+        'sk-SK' => 'Slovenčina',
+        'sl-SI' => 'Slovenščina',
+        'sr-RS' => 'Српски / Srpski',
+        'sv-SE' => 'Svenska',
+        'th-TH' => 'ไทย',
+        'tr-TR' => 'Türkçe',
+        'uk-UA' => 'Українська',
+        'vi-VN' => 'Tiếng Việt',
+        'zh-CN' => '中文 (中国大陆)',
+        'zh-TW' => '中文 (台灣)',
     ];
 
     public function getConfig()
@@ -51,11 +122,18 @@ class Module extends AbstractModule
                 foreach (self::CITATION_STYLES as $key => $value) {
                     $citationStyles[] = [$value, $key];
                 }
+                // Convert bibliography locales to a CKEditor-compatible format.
+                $bibliographyLocales = [];
+                foreach (self::BIBLIOGRAPHY_LOCALES as $key => $value) {
+                    $bibliographyLocales[] = [$value, $key];
+                }
                 // Set global variables for use by Zotero CKEditor plugin.
                 $script = sprintf(<<<'EOD'
                     const ZoteroCitationsCkeditorPluginPath = "%s";
                     const ZoteroCitationsCitationStyles = "%s";
                     const ZoteroCitationsCitationStyle = "%s";
+                    const ZoteroCitationsBibliographyLocales = "%s";
+                    const ZoteroCitationsBibliographyLocale = "%s";
                     const ZoteroCitationsApiLibraryType = "%s";
                     const ZoteroCitationsApiLibraryId = "%s";
                     const ZoteroCitationsApiKey = "%s";
@@ -64,6 +142,8 @@ class Module extends AbstractModule
                     $view->escapeJs($pluginPath),
                     $view->escapeJs(json_encode($citationStyles)),
                     $view->escapeJs($view->userSetting('zotero_citations_citation_style', 'chicago-author-date')),
+                    $view->escapeJs(json_encode($bibliographyLocales)),
+                    $view->escapeJs($view->userSetting('zotero_citations_bibliography_locale', 'en-US')),
                     $view->escapeJs($view->userSetting('zotero_citations_api_library_type', 'users')),
                     $view->escapeJs($view->userSetting('zotero_citations_api_library_id')),
                     $view->escapeJs($view->userSetting('zotero_citations_api_key')),
@@ -89,6 +169,19 @@ class Module extends AbstractModule
                         'class' => 'chosen-select',
                         'data-placeholder' => 'Select a citation style', // @translate
                         'value' => $form->getUserSettings()->get('zotero_citations_citation_style', 'chicago-author-date'),
+                    ],
+                ]);
+                $form->get('user-settings')->add([
+                    'type' => 'select',
+                    'name' => 'zotero_citations_bibliography_locale',
+                    'options' => [
+                        'label' => 'Zotero Citation: Bibliography locale', // @translate
+                        'value_options' => self::BIBLIOGRAPHY_LOCALES,
+                    ],
+                    'attributes' => [
+                        'class' => 'chosen-select',
+                        'data-placeholder' => 'Select a bibliography locale', // @translate
+                        'value' => $form->getUserSettings()->get('zotero_citations_bibliography_locale', 'en-US'),
                     ],
                 ]);
                 $form->get('user-settings')->add([

@@ -94,6 +94,7 @@ CKEDITOR.dialog.add('zoteroDialog', function(editor) {
             itemKey: itemKeys.join(','),
             format: 'bib',
             style: dialog.getValueOf('tab-settings', 'citation-style'),
+            locale: dialog.getValueOf('tab-settings', 'bibliography-locale'),
         };
         const url = `https://api.zotero.org/${libraryType}/${libraryId}/items`;
         const response = await fetchApiResponse(dialog, url, params);
@@ -236,6 +237,13 @@ CKEDITOR.dialog.add('zoteroDialog', function(editor) {
                         label: 'Citation style',
                         items: JSON.parse(editor.config.zoteroCitationStyles),
                         default: editor.config.zoteroCitationStyle,
+                    },
+                    {
+                        type: 'select',
+                        id: 'bibliography-locale',
+                        label: 'Bibliography locale',
+                        items: JSON.parse(editor.config.zoteroBibliographyLocales),
+                        default: editor.config.zoteroBibliographyLocale,
                     },
                     {
                         type: 'select',
