@@ -131,8 +131,7 @@ class Module extends AbstractModule
                 foreach (self::BIBLIOGRAPHY_LOCALES as $key => $value) {
                     $bibliographyLocales[] = [$value, $key];
                 }
-                // Set global variables for use by Zotero CKEditor plugin.
-                $script = sprintf(<<<'EOD'
+                $scriptTemplate = <<<'EOD'
 const ZoteroCitationsCkeditorPluginPath = "%s";
 const ZoteroCitationsCitationStyles = "%s";
 const ZoteroCitationsCitationStyle = "%s";
@@ -143,7 +142,10 @@ const ZoteroCitationsApiLibraryType = "%s";
 const ZoteroCitationsApiLibraryId = "%s";
 const ZoteroCitationsApiKey = "%s";
 const ZoteroCitationsSearchSort = "%s";
-EOD,
+EOD;
+                // Set global variables for use by Zotero CKEditor plugin.
+                $script = sprintf(
+                    $scriptTemplate,
                     $view->escapeJs($pluginPath),
                     $view->escapeJs(json_encode($citationStyles)),
                     $view->escapeJs($view->userSetting('zotero_citations_citation_style', 'chicago-author-date')),
