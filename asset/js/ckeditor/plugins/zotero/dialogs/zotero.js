@@ -75,6 +75,9 @@ CKEDITOR.dialog.add('zoteroDialog', function(editor) {
         };
         const url = `https://api.zotero.org/${libraryType}/${libraryId}/items/${itemKey}`;
         const response = await fetchApiResponse(dialog, url, params);
+        if (!response.ok) {
+            throw new Error(`${response.status} ${response.statusText}`);
+        }
         return await response.json();
     };
     /**
@@ -99,6 +102,9 @@ CKEDITOR.dialog.add('zoteroDialog', function(editor) {
         };
         const url = `https://api.zotero.org/${libraryType}/${libraryId}/items`;
         const response = await fetchApiResponse(dialog, url, params);
+        if (!response.ok) {
+            throw new Error(`${response.status} ${response.statusText}`);
+        }
         return await response.text();
     };
     /**
@@ -296,6 +302,8 @@ CKEDITOR.dialog.add('zoteroDialog', function(editor) {
             if (addBib) {
                 getBibliography(dialog).then(bib => {
                     editor.insertHtml(bib);
+                }).catch(error => {
+                    alert(`${error}. Did you enter a valid library ID and/or API key?`);
                 });
             // Add citation.
             } else if (checkedItem.length) {
@@ -304,6 +312,8 @@ CKEDITOR.dialog.add('zoteroDialog', function(editor) {
                     ckSpan.setAttribute('class', 'zotero-citation-' + item.key);
                     ckSpan.setHtml(item.citation);
                     editor.insertElement(ckSpan);
+                }).catch(error => {
+                    alert(`${error}. Did you enter a valid library ID and/or API key?`);
                 });
             }
             const previousButton = $(dialog.getContentElement('tab-citation', 'previous-button').getElement().$);
