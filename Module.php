@@ -133,17 +133,17 @@ class Module extends AbstractModule
                 }
                 // Set global variables for use by Zotero CKEditor plugin.
                 $script = sprintf(<<<'EOD'
-                    const ZoteroCitationsCkeditorPluginPath = "%s";
-                    const ZoteroCitationsCitationStyles = "%s";
-                    const ZoteroCitationsCitationStyle = "%s";
-                    const ZoteroCitationsBibliographyLocales = "%s";
-                    const ZoteroCitationsBibliographyLocale = "%s";
-                    const ZoteroCitationsBibliographyLinkwrap = "%s";
-                    const ZoteroCitationsApiLibraryType = "%s";
-                    const ZoteroCitationsApiLibraryId = "%s";
-                    const ZoteroCitationsApiKey = "%s";
-                    const ZoteroCitationsSearchSort = "%s";
-                    EOD,
+const ZoteroCitationsCkeditorPluginPath = "%s";
+const ZoteroCitationsCitationStyles = "%s";
+const ZoteroCitationsCitationStyle = "%s";
+const ZoteroCitationsBibliographyLocales = "%s";
+const ZoteroCitationsBibliographyLocale = "%s";
+const ZoteroCitationsBibliographyLinkwrap = "%s";
+const ZoteroCitationsApiLibraryType = "%s";
+const ZoteroCitationsApiLibraryId = "%s";
+const ZoteroCitationsApiKey = "%s";
+const ZoteroCitationsSearchSort = "%s";
+EOD,
                     $view->escapeJs($pluginPath),
                     $view->escapeJs(json_encode($citationStyles)),
                     $view->escapeJs($view->userSetting('zotero_citations_citation_style', 'chicago-author-date')),
