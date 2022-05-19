@@ -174,6 +174,15 @@ CKEDITOR.dialog.add('zoteroDialog', function(editor) {
                     {
                         type: 'text',
                         id: 'search-query',
+                        // Users may have the urge to press the enter key after
+                        // entering a search string. This will disable the OK
+                        // button when the search input is in focus.
+                        onFocus: function(e) {
+                            CKEDITOR.dialog.getCurrent().getButton('ok').disable();
+                        },
+                        onBlur: function(e) {
+                            CKEDITOR.dialog.getCurrent().getButton('ok').enable();
+                        }
                     },
                     {
                         type: 'button',
@@ -294,6 +303,18 @@ CKEDITOR.dialog.add('zoteroDialog', function(editor) {
                 ]
             }
         ],
+        onLoad: function() {
+            this.on('selectPage', function(e) {
+                // Users may have the urge to click the OK button after making
+                // changes in the settings tab. This will disable the OK button
+                // when on the Settings tab.
+                if ('tab-settings' === e.data.page) {
+                    CKEDITOR.dialog.getCurrent().getButton('ok').disable();
+                } else {
+                    CKEDITOR.dialog.getCurrent().getButton('ok').enable();
+                }
+            });
+        },
         onOk: function() {
             const dialog = this;
             const checkedItem = $(dialog.getElement().$).find('input[name="ckeditor-zotero-item"]:checked');
