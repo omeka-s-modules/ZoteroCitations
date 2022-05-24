@@ -166,11 +166,15 @@ EOD;
             'form.add_elements',
             function (Event $event) {
                 $form = $event->getTarget();
+                $elementGroups = $form->get('user-settings')->getOption('element_groups', []);
+                $elementGroups['zotero_citation'] = 'Zotero Citation';
+                $form->get('user-settings')->setOption('element_groups', $elementGroups);
                 $form->get('user-settings')->add([
                     'type' => 'select',
                     'name' => 'zotero_citations_citation_style',
                     'options' => [
-                        'label' => 'Zotero Citation: Citation style', // @translate
+                        'element_group' => 'zotero_citation',
+                        'label' => 'Citation style', // @translate
                         'value_options' => self::CITATION_STYLES,
                     ],
                     'attributes' => [
@@ -183,7 +187,8 @@ EOD;
                     'type' => 'select',
                     'name' => 'zotero_citations_bibliography_locale',
                     'options' => [
-                        'label' => 'Zotero Citation: Bibliography locale', // @translate
+                        'element_group' => 'zotero_citation',
+                        'label' => 'Bibliography locale', // @translate
                         'value_options' => self::BIBLIOGRAPHY_LOCALES,
                     ],
                     'attributes' => [
@@ -196,10 +201,11 @@ EOD;
                     'type' => 'checkbox',
                     'name' => 'zotero_citations_bibliography_linkwrap',
                     'options' => [
-                        'label' => 'Zotero Citation: Bibliography link wrap', // @translate
+                        'element_group' => 'zotero_citation',
+                        'label' => 'Bibliography link wrap', // @translate
                         'use_hidden_element' => true,
-                        'checked_value' => 1,
-                        'unchecked_value' => 0,
+                        'checked_value' => '1',
+                        'unchecked_value' => '0',
                     ],
                     'attributes' => [
                         'value' => $form->getUserSettings()->get('zotero_citations_bibliography_linkwrap', 0),
@@ -209,7 +215,8 @@ EOD;
                     'type' => 'select',
                     'name' => 'zotero_citations_api_library_type',
                     'options' => [
-                        'label' => 'Zotero Citation: API library type', // @translate
+                        'element_group' => 'zotero_citation',
+                        'label' => 'API library type', // @translate
                         'value_options' => [
                             'users' => 'User', // @translate
                             'groups' => 'Group', // @translate
@@ -224,7 +231,8 @@ EOD;
                     'type' => 'number',
                     'name' => 'zotero_citations_api_library_id',
                     'options' => [
-                        'label' => 'Zotero Citation: API library ID', // @translate
+                        'element_group' => 'zotero_citation',
+                        'label' => 'API library ID', // @translate
                     ],
                     'attributes' => [
                         'value' => $form->getUserSettings()->get('zotero_citations_api_library_id'),
@@ -234,7 +242,8 @@ EOD;
                     'type' => 'text',
                     'name' => 'zotero_citations_api_key',
                     'options' => [
-                        'label' => 'Zotero Citation: API key', // @translate
+                        'element_group' => 'zotero_citation',
+                        'label' => 'API key', // @translate
                     ],
                     'attributes' => [
                         'value' => $form->getUserSettings()->get('zotero_citations_api_key'),
@@ -244,7 +253,8 @@ EOD;
                     'type' => 'select',
                     'name' => 'zotero_citations_search_sort',
                     'options' => [
-                        'label' => 'Zotero Citation: Search sort by', // @translate
+                        'element_group' => 'zotero_citation',
+                        'label' => 'Search sort by', // @translate
                         'value_options' => [
                             'title' => 'Title', // @translate
                             'creator' => 'Creator', // @translate
