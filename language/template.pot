@@ -1,0 +1,51 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: Module.php:177
+msgid "Citation style"
+msgstr ""
+
+#: Module.php:182
+msgid "Select a citation style"
+msgstr ""
+
+#: Module.php:191
+msgid "Bibliography locale"
+msgstr ""
+
+#: Module.php:196
+msgid "Select a bibliography locale"
+msgstr ""
+
+#: Module.php:205
+msgid "Bibliography link wrap"
+msgstr ""
+
+#: Module.php:219
+msgid "API library type"
+msgstr ""
+
+#: Module.php:235
+msgid "API library ID"
+msgstr ""
+
+#: Module.php:246
+msgid "API key"
+msgstr ""
+
+#: Module.php:257
+msgid "Search sort by"
+msgstr ""
+
+#: Module.php:261
+msgid "Date modified"
+msgstr ""
