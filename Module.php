@@ -4,7 +4,6 @@ namespace ZoteroCitations;
 use Omeka\Module\AbstractModule;
 use Laminas\EventManager\Event;
 use Laminas\EventManager\SharedEventManagerInterface;
-use Laminas\Mvc\MvcEvent;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 
 class Module extends AbstractModule
@@ -40,7 +39,7 @@ class Module extends AbstractModule
     const BIBLIOGRAPHY_LOCALES = [
         'af-ZA' => 'Afrikaans',
         'ar' => 'العربية',
-        'bg-BG' =>'Български',
+        'bg-BG' => 'Български',
         'ca-AD' => 'Català',
         'cs-CZ' => 'Čeština',
         'cy-GB' => 'Cymraeg',
