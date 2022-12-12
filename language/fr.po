@@ -2,50 +2,57 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
+# Translators:
+# Pols12 <poltron54@gmail.com>, 2022
+# 
 #, fuzzy
 msgid ""
 msgstr ""
+"Last-Translator: Pols12 <poltron54@gmail.com>, 2022\n"
+"Language-Team: French (https://www.transifex.com/omeka/teams/14184/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 
 #: Module.php:176
 msgid "Citation style"
-msgstr ""
+msgstr "Style de référence"
 
 #: Module.php:181
 msgid "Select a citation style"
-msgstr ""
+msgstr "Choisissez un style de référence"
 
 #: Module.php:190
 msgid "Bibliography locale"
-msgstr ""
+msgstr "Langue de la bibliographie"
 
 #: Module.php:195
 msgid "Select a bibliography locale"
-msgstr ""
+msgstr "Choisissez une langue pour la bibliographie"
 
 #: Module.php:204
 msgid "Bibliography link wrap"
-msgstr ""
+msgstr "Liens enveloppant dans les bibliographies"
 
 #: Module.php:218
 msgid "API library type"
-msgstr ""
+msgstr "Type de bibliothèque de l’API"
 
 #: Module.php:234
 msgid "API library ID"
-msgstr ""
+msgstr "ID de bibliothèque de l’API"
 
 #: Module.php:245
 msgid "API key"
-msgstr ""
+msgstr "Clé de l’API"
 
 #: Module.php:256
 msgid "Search sort by"
-msgstr ""
+msgstr "Champ de tri de la recherche"
 
 #: Module.php:260
 msgid "Date modified"
-msgstr ""
+msgstr "Date de modification"
